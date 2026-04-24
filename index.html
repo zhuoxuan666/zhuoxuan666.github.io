@@ -1,1 +1,260 @@
-网站正在建设中
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* 固定主题色 —— 全程不变！ */
+        :root {
+            --primary: #446DF6; /* 高级紫蓝色（全程固定） */
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf5 100%);
+            min-height: 100vh;
+        }
+
+        /* —————— 导航栏 固定颜色 不滚动变色 —————— */
+        .navbar {
+            background: var(--primary);
+            color: white;
+            padding: 1.2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.4s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* 取消滚动变色！ */
+        .navbar.scrolled {
+            padding: 0.8rem 0;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            font-size: 1.4rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.2rem;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        /* 导航 hover 下划线动画 */
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* 主内容区域 */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 3.5rem 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 3.5rem;
+        }
+
+        /* 左侧头像 */
+        .left {
+            flex-shrink: 0;
+        }
+
+        .profile-avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 6px solid #fff;
+            box-shadow: 0 0 0 3px var(--primary);
+            transition: 0.4s;
+            object-fit: cover;
+        }
+        .profile-avatar:hover {
+            transform: scale(1.07);
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+
+        /* 右侧文字 */
+        .right {
+            text-align: left;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .username {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .bio {
+            font-size: 1.2rem;
+            margin-bottom: 2.2rem;
+            color: #444;
+            line-height: 1.7;
+            padding-left: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 1.7rem;
+        }
+        .social-links a {
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        .social-links a:hover {
+            transform: translateY(-4px);
+        }
+
+        /* 网站标准极简底部 */
+        .footer {
+            background: #2c3e50;
+            color: rgba(255,255,255,0.7);
+            padding: 1.8rem 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* 手机自适应 */
+        @media (max-width: 768px) {
+            .card {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+                padding: 2.5rem 1.5rem;
+            }
+            .right {
+                text-align: center;
+            }
+            .bio {
+                border-left: none;
+                padding-left: 0;
+            }
+            .social-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 升级后精致导航栏 -->
+    <nav class="navbar" id="nav">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-user"></i> 个人主页
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">首页</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <section class="hero" id="home">
+        <div class="card">
+            <div class="left">
+                <img src="https://picsum.photos/200/200" alt="头像" class="profile-avatar">
+            </div>
+            <div class="right">
+                <h1>你的名字</h1>
+                <p class="username">个人简介</p>
+                <p class="bio">热爱生活，专注成长</p>
+                
+                <!-- 全部你的账号链接 -->
+                <div class="social-links">
+                    <a href="https://t.me/senchuan2751" target="_blank"><i class="fas fa-paper-plane"></i></a>
+                    <a href="https://x.com/zhuoxuan2010" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://space.bilibili.com/1399932370" target="_blank"><i class="fab fa-bilibili"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-qq"></i></a>
+                    <a href="https://github.com/zhuoxuan666" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://music.163.com/#/artist?id=99251029" target="_blank"><i class="fa-solid fa-music"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 网站通用极简底部 -->
+    <footer class="footer">
+        © 2025 个人主页 版权所有
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function(){
+            const nav = document.getElementById('nav');
+            nav.classList.toggle('scrolled', window.scrollY > 30);
+        });
+    </script>
+</body>
+</html>
