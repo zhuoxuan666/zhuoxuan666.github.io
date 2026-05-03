@@ -3,257 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人主页</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>太空杀交流群 - 成员档案</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        /* 固定主题色 —— 全程不变！ */
-        :root {
-            --primary: #446DF6; /* 高级紫蓝色（全程固定） */
-            --light: #f8f9fa;
-            --dark: #2c3e50;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf5 100%);
-            min-height: 100vh;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
         }
 
-        /* —————— 导航栏 固定颜色 不滚动变色 —————— */
-        .navbar {
-            background: var(--primary);
-            color: white;
-            padding: 1.2rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            transition: all 0.4s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        /* 取消滚动变色！ */
-        .navbar.scrolled {
-            padding: 0.8rem 0;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-        }
-
-        .nav-container {
-            max-width: 1000px;
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .logo {
-            font-size: 1.3rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logo i {
-            font-size: 1.4rem;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2.2rem;
-        }
-
-        .nav-menu a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
-            position: relative;
-            transition: 0.3s;
-        }
-
-        /* 导航 hover 下划线动画 */
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: white;
-            transition: width 0.3s ease;
-        }
-
-        .nav-menu a:hover::after {
-            width: 100%;
-        }
-
-        /* 主内容区域 */
-        .hero {
-            min-height: 85vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem 2rem;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 3.5rem 2.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            max-width: 900px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 3.5rem;
-        }
-
-        /* 左侧头像 */
-        .left {
-            flex-shrink: 0;
-        }
-
-        .profile-avatar {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            border: 6px solid #fff;
-            box-shadow: 0 0 0 3px var(--primary);
-            transition: 0.4s;
-            object-fit: cover;
-        }
-        .profile-avatar:hover {
-            transform: scale(1.07);
-            box-shadow: 0 0 0 3px var(--primary);
-        }
-
-        /* 右侧文字 */
-        .right {
-            text-align: left;
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-            font-weight: 700;
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 8px;
         }
 
-        .username {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 1rem;
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1em;
         }
 
-        .bio {
-            font-size: 1.2rem;
-            margin-bottom: 2.2rem;
-            color: #444;
-            line-height: 1.7;
-            padding-left: 1rem;
-            border-left: 3px solid var(--primary);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1.5rem;
-            font-size: 1.7rem;
-        }
-        .social-links a {
-            color: var(--primary);
-            transition: all 0.3s ease;
-        }
-        .social-links a:hover {
-            transform: translateY(-4px);
-        }
-
-        /* 网站标准极简底部 */
-        .footer {
-            background: #2c3e50;
-            color: rgba(255,255,255,0.7);
-            padding: 1.8rem 2rem;
+        /* 加载状态 */
+        .loading {
             text-align: center;
-            font-size: 0.9rem;
+            padding: 30px;
+            color: #7f8c8d;
         }
 
-        /* 手机自适应 */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 成员网格 */
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .member-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .member-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #ecf0f1;
+        }
+
+        .name-role h3 {
+            font-size: 1.1em;
+            margin-bottom: 4px;
+            color: #2c3e50;
+        }
+
+        .qq-id {
+            color: #7f8c8d;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .qq-id span {
+            background: #f8f9fa;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .role-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+
+        .card-body p {
+            color: #555;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .signature {
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 0.85em;
+            padding-left: 10px;
+            border-left: 2px solid #e0e0e0;
+            margin: 8px 0;
+        }
+
+        /* 额外信息样式 */
+        .extra-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.8em;
+        }
+
+        .info-tag {
+            background: #f0f8ff;
+            color: #3498db;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .vip-tag {
+            background: #fff0f0;
+            color: #e74c3c;
+        }
+
+        /* 详情按钮 */
+        .detail-btn {
+            display: inline-block;
+            padding: 6px 16px;
+            margin-top: 10px;
+            background: #3498db;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .detail-btn:hover {
+            background: #2980b9;
+        }
+
+        /* 管理员特殊样式 */
+        .admin-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+        }
+
+        .admin .qq-id span {
+            background: #ffebee;
+            color: #c0392b;
+        }
+
+        .manager-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #95a5a6;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+        }
+
+        /* 响应式 */
         @media (max-width: 768px) {
-            .card {
-                flex-direction: column;
-                text-align: center;
-                gap: 2rem;
-                padding: 2.5rem 1.5rem;
+            .member-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
             }
-            .right {
-                text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8em;
             }
-            .bio {
-                border-left: none;
-                padding-left: 0;
-            }
-            .social-links {
-                justify-content: center;
+            .member-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
-
 <body>
-    <!-- 升级后精致导航栏 -->
-    <nav class="navbar" id="nav">
-        <div class="nav-container">
-            <div class="logo">
-                <i class="fas fa-user"></i> 个人主页
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#home">首页</a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="container">
+        <header>
+            <h1>太空杀交流群成员档案</h1>
+            <p class="subtitle">点击成员卡片查看详细资料</p>
+        </header>
 
-    <!-- 主内容 -->
-    <section class="hero" id="home">
-        <div class="card">
-            <div class="left">
-                <img src="https://picsum.photos/200/200" alt="头像" class="profile-avatar">
-            </div>
-            <div class="right">
-                <h1>你的名字</h1>
-                <p class="username">个人简介</p>
-                <p class="bio">热爱生活，专注成长</p>
-                
-                <!-- 全部你的账号链接 -->
-                <div class="social-links">
-                    <a href="https://t.me/senchuan2751" target="_blank"><i class="fas fa-paper-plane"></i></a>
-                    <a href="https://x.com/zhuoxuan2010" target="_blank"><i class="fab fa-twitter"></i></a>
-                    <a href="https://space.bilibili.com/1399932370" target="_blank"><i class="fab fa-bilibili"></i></a>
-                    <a href="#" target="_blank"><i class="fab fa-qq"></i></a>
-                    <a href="https://github.com/zhuoxuan666" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="https://music.163.com/#/artist?id=99251029" target="_blank"><i class="fa-solid fa-music"></i></a>
-                </div>
+        <!-- 成员网格 -->
+        <div class="member-grid" id="memberGrid">
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>正在加载成员信息...
             </div>
         </div>
-    </section>
 
-    <!-- 网站通用极简底部 -->
-    <footer class="footer">
-        © 2025 个人主页 版权所有
-    </footer>
+        <footer>
+            <p>© 2026 太空杀交流群 | 本页面持续更新中 | 当前成员: <span id="memberCount">0</span>人</p>
+        </footer>
+    </div>
 
     <script>
-        window.addEventListener('scroll', function(){
-            const nav = document.getElementById('nav');
-            nav.classList.toggle('scrolled', window.scrollY > 30);
+        // 成员数据配置
+        const membersConfig = [
+            {
+                qq: "3408367085",
+                role: "内鬼之神 / 群主",
+                tags: ["admin", "killer"],
+                detailPage: "detail_3408367085.html"
+            },
+            {
+                qq: "2190294975",
+                role: "管理 / 船员高手",
+                tags: ["admin", "crew"],
+                detailPage: "detail_2190294975.html"
+            }
+        ];
+
+        // 修复后的获取QQ信息函数
+        async function fetchQQInfo(qq) {
+            try {
+                // 修复URL拼接问题
+                const apiUrl = `https://uapis.cn/api/v1/social/qq/userinfo?qq=${qq}`;
+                console.log("请求URL:", apiUrl);
+                
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP错误: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log("API返回数据:", data);
+                return data;
+            } catch (error) {
+                console.error(`获取QQ ${qq} 信息失败:`, error);
+                return null;
+            }
+        }
+
+        // 创建成员卡片
+        function createMemberCard(memberConfig, apiData) {
+            if (!apiData) {
+                return `
+                    <div class="member-card" data-tags="${memberConfig.tags.join(' ')}">
+                        <div class="card-header">
+                            <img src="https://via.placeholder.com/150/cccccc/666666?text=加载失败" 
+                                 class="avatar" 
+                                 alt="${memberConfig.qq}">
+                            <div class="name-role">
+                                <h3>加载失败</h3>
+                                <div class="qq-id">QQ: <span>${memberConfig.qq}</span></div>
+                                <span class="role-tag">${memberConfig.role}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p>信息加载失败，请稍后刷新页面。</p>
+                            <a href="${memberConfig.detailPage}" class="detail-btn">查看详情</a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 从API数据中提取信息
+            const nickname = apiData.nickname || "用户";
+            const avatar = apiData.avatar_url ? apiData.avatar_url.replace(/\\u0026/g, '&') : `https://q.qlogo.cn/g?b=qq&nk=${memberConfig.qq}&s=100`;
+            const qid = apiData.qid || "";
+            const qqLevel = apiData.qq_level || 0;
+            const age = apiData.age || 0;
+            const sex = apiData.sex === "male" ? "男" : (apiData.sex === "female" ? "女" : apiData.sex || "");
+            const isVip = apiData.is_vip || false;
+            const vipLevel = apiData.vip_level || 0;
+            const location = apiData.location || "";
+            const regTime = apiData.reg_time ? new Date(apiData.reg_time).toLocaleDateString() : "";
+            
+            // 处理个性签名
+            const longNick = apiData.long_nick || "";
+            
+            // 判断是否是管理员或群主
+            const isAdmin = memberConfig.tags.includes("admin");
+            const adminBadge = isAdmin ? (memberConfig.role.includes("群主") ? 
+                '<div class="admin-badge">群主</div>' : '<div class="manager-badge">管理</div>') : '';
+
+            // 生成额外信息标签
+            let extraInfoHTML = '';
+            if (qid) {
+                extraInfoHTML += `<span class="info-tag">QID: ${qid}</span>`;
+            }
+            if (qqLevel > 0) {
+                extraInfoHTML += `<span class="info-tag">等级: ${qqLevel}</span>`;
+            }
+            if (age > 0) {
+                extraInfoHTML += `<span class="info-tag">年龄: ${age}</span>`;
+            }
+            if (sex) {
+                extraInfoHTML += `<span class="info-tag">性别: ${sex}</span>`;
+            }
+            if (isVip && vipLevel > 0) {
+                extraInfoHTML += `<span class="info-tag vip-tag">VIP ${vipLevel}</span>`;
+            }
+
+            // 生成卡片HTML
+            return `
+                <div class="member-card ${isAdmin ? 'admin' : ''}" data-tags="${memberConfig.tags.join(' ')}">
+                    ${adminBadge}
+                    <div class="card-header">
+                        <img src="${avatar}" 
+                             class="avatar" 
+                             alt="${nickname}"
+                             onerror="this.onerror=null; this.src='https://via.placeholder.com/150/cccccc/666666?text=${nickname.substring(0,1)}'">
+                        <div class="name-role">
+                            <h3>${nickname}</h3>
+                            <div class="qq-id">QQ: <span>${memberConfig.qq}</span></div>
+                            <span class="role-tag">${memberConfig.role}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        ${longNick && longNick !== "Null" ? `<p class="signature">"${longNick}"</p>` : ''}
+                        ${location ? `<p><small>地区: ${location}</small></p>` : ''}
+                        ${extraInfoHTML ? `<div class="extra-info">${extraInfoHTML}</div>` : ''}
+                        ${regTime ? `<p><small>注册时间: ${regTime}</small></p>` : ''}
+                        <a href="${memberConfig.detailPage}" class="detail-btn">查看详情</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 加载所有成员
+        async function loadAllMembers() {
+            const memberGrid = document.getElementById('memberGrid');
+            const loadingElement = document.getElementById('loading');
+            const memberCountElement = document.getElementById('memberCount');
+            
+            // 用于存储所有卡片
+            const allCards = [];
+            
+            // 为每个成员获取信息
+            for (const memberConfig of membersConfig) {
+                try {
+                    console.log(`正在加载成员: ${memberConfig.qq}`);
+                    const apiData = await fetchQQInfo(memberConfig.qq);
+                    const cardHTML = createMemberCard(memberConfig, apiData);
+                    allCards.push(cardHTML);
+                    
+                    // 每加载完一个成员就更新一次显示
+                    memberGrid.innerHTML = allCards.join('');
+                    loadingElement.style.display = 'none';
+                    
+                } catch (error) {
+                    console.error(`处理成员 ${memberConfig.qq} 时出错:`, error);
+                    const errorCard = createMemberCard(memberConfig, null);
+                    allCards.push(errorCard);
+                }
+            }
+            
+            // 更新成员数量
+            memberCountElement.textContent = membersConfig.length;
+            
+            // 如果没有加载到任何卡片，显示错误信息
+            if (allCards.length === 0) {
+                memberGrid.innerHTML = '<div class="loading">未能加载任何成员信息，请检查网络连接或稍后重试。</div>';
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('页面加载完成，开始初始化');
+            loadAllMembers();
         });
     </script>
 </body>
